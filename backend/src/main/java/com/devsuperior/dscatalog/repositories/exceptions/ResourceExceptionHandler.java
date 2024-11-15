@@ -1,5 +1,6 @@
 package com.devsuperior.dscatalog.repositories.exceptions;
 
+import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -19,25 +20,24 @@ public class ResourceExceptionHandler {
         StandardError standardError = new StandardError();
         standardError.setTimeStamp(Instant.now());
         standardError.setStatus(status.value());
-        standardError.setError("CONTROLLER - 404 (ID Não encontrado).");
+        standardError.setError("Resource not found.");
         standardError.setMessage(e.getMessage());
         standardError.setPath(request.getRequestURI());
         return ResponseEntity.status(status).body(standardError);
     }
 
-//    @ExceptionHandler(IntegridadeBD.class)
-//    public ResponseEntity<ErroPadrao> integridadeBD(IntegridadeBD integridade,
-//                                                    HttpServletRequest requisicao) {
-//        HttpStatus status = HttpStatus.BAD_REQUEST;
-//        ErroPadrao erroPadrao = new ErroPadrao();
-//        erroPadrao.setTimeStamp(Instant.now());
-//        erroPadrao.setStatus(status.value());
-//        erroPadrao.setErro("CONTROLLER - 400 (Violação de Integridade).");
-//        erroPadrao.setMensagem(integridade.getMessage());
-//        erroPadrao.setCaminho(requisicao.getRequestURI());
-//        return ResponseEntity.status(status).body(erroPadrao);
-//    }
-//
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError standardError = new StandardError();
+        standardError.setTimeStamp(Instant.now());
+        standardError.setStatus(status.value());
+        standardError.setError("Database exception.");
+        standardError.setMessage(e.getMessage());
+        standardError.setPath(request.getRequestURI());
+        return ResponseEntity.status(status).body(standardError);
+    }
+
 //    @ExceptionHandler(MethodArgumentNotValidException.class)
 //    public ResponseEntity<ErroDeValidacao> validacao(MethodArgumentNotValidException validacao,
 //                                                     HttpServletRequest requisicao) {
