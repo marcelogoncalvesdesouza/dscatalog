@@ -31,5 +31,17 @@ public class AccountTests {
         Assertions.assertEquals(expectedValue, acc.getBalance());
     }
 
+    @Test
+    public void fullWithdrawShouldClearBalance() {
+        // Arrange
+        double expectedValue = 0.0;
+        double initialBalance = 800.0;
+        Account acc = AccountFactory.createAccount(initialBalance);
+        // Act
+        double result = acc.fullWithdraw();
+        // Assert
+        Assertions.assertEquals(expectedValue, acc.getBalance());
+        Assertions.assertEquals(initialBalance, result);
+    }
 
 }
