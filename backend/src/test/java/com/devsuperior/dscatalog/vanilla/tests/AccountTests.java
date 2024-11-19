@@ -32,7 +32,7 @@ public class AccountTests {
     }
 
     @Test
-    public void fullWithdrawShouldClearBalance() {
+    public void fullWithdrawShouldClearBalanceAndReturnFullBalance() {
         // Arrange
         double expectedValue = 0.0;
         double initialBalance = 800.0;
@@ -44,4 +44,24 @@ public class AccountTests {
         Assertions.assertEquals(initialBalance, result);
     }
 
+    @Test
+    public void withdrawShouldDecreaseBalanceWhenSufficientBalance() {
+        // Arrange
+        Account acc = AccountFactory.createAccount(800.0);
+        // Act
+        acc.withdraw(500.0);
+        // Assert
+        Assertions.assertEquals(300.0, acc.getBalance());
+    }
+
+    @Test
+    public void withdrawShouldThrowExceptionWhenInsufficientBalance() {
+        // Assert
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            // Arrange
+            Account acc = AccountFactory.createAccount(800.0);
+            // Act
+            acc.withdraw(801.0);
+        });
+    }
 }
